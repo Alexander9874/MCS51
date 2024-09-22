@@ -302,7 +302,7 @@ Begin
 			S => s7
 		);
 
-	DD9: RG
+	DD8: RG
 		PORT MAP (
 			-- NESSESSORY:
 

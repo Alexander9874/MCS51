@@ -227,7 +227,7 @@ Begin
 			S => s7
 		);
 
-	DD9: RG
+	DD8: RG
 		PORT MAP (
 			SI0 => SI0,
 			SI1 => SI1,
