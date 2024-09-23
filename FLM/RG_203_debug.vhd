@@ -623,7 +623,7 @@ architecture SM4_arch of SM4 is
 begin
 	process(A, B)
 	begin
-		S <= A + B;
+		S <= A + B + 1;
 	end process;
 end SM4_arch;
 
