@@ -8,54 +8,89 @@ START:
 	SETB	EX0					; enable INT0
 	SETB	EA					; enable global
 	SETB	IT0					; 1/0
-CYCLE:
+CYCLE_INF:
 	MOV		P4,		R7
-	SJMP	CYCLE
-	
+	SJMP	CYCLE_INF
 INTER:
 	MOV		DPTR,	#7FFAh
 	MOVX	A,		@DPTR
-
+PREP_A:
 	MOV		DPH, 	#80h
 	RR		A
 	MOV		B,		A
 	ANL		A,		#03h
-	ADD		A,		#20h
-	MOV		DPL,	A
-	MOVX	A,		@DPTR
-	MOV		R0,		A
-	
-	MOV		A,		B
-	RR		A
-	RR		A
-	ANL		A,		#03h
+	MOV		R3,		A
 	ADD		A,		#24h
 	MOV		DPL,	A
 	MOVX	A,		@DPTR
 	MOV		R1,		A
+PREP_B:	
+	MOV		A,		B
+	RR		A
+	RR		A
+	ANL		A,		#03h
+	MOV		R2,		A
+	ADD		A,		#20h
+	MOV		DPL,	A
+	MOVX	A,		@DPTR
+	MOV		R0,		A
 
 	MOV		A,		B
 	JB		ACC.7,	OPER_2
 OPER_1:
-	MOV		R0,		#0FFh
-	MOV		R1,		#0FFh
-	MOV		R2,		#0FFh
-	MOV		R3,		#0FFh
-	MOV		R4,		#0FFh
-	MOV		R5,		#0FFh
-	MOV		R6,		#0FFh
-	MOV		R7,		#0FFh
+	MOV		R2,		#000h
+	MOV		R3,		#000h
+	MOV		R4,		#008h
+	MOV		R7,		#000h
+	SETB	C
+	MOV		A,		R1
+CYCLE_OP1:
+	JB		ACC.0,	ONE
+ZERO:	
+	CLR		C
+	INC		R3
+	JMP		DEC_REG
+ONE:
+	JC		DEC_REG
+	INC		R2
+	MOV		A,		R2
+	MOV		B,		R3
+	MUL		AB
+	ADD		A,		R7
+	MOV		R7,		A
+	MOV		R3,		#000h
+	SETB	C
+DEC_REG:
+	MOV		A,		R1
+	RR		A
+	MOV		R1,		A
+	DJNZ	R4,		CYCLE_OP1
+END_CYCLE_OP1:
+	INC		R2
+	MOV		A,		R2
+	MOV		B,		R3
+	MUL		AB
+	ADD		A,		R7
 	JMP		INTER_END
 OPER_2:
-	MOV		R0,		#00h
-	MOV		R1,		#00h
-	MOV		R2,		#00h
-	MOV		R3,		#00h
-	MOV		R4,		#00h
-	MOV		R5,		#00h
-	MOV		R6,		#00h
-	MOV		R7,		#00h
+	MOV		A,		R0
+	INC		R2
+	INC		R3
+LEFT_CHECK:
+	DJNZ	R2,		LEFT_CYCLE
+	JMP		RIGHT_CHECK
+LEFT_CYCLE:
+	RL		A
+	DJNZ	R2,		LEFT_CYCLE
+RIGHT_CHECK:
+	DJNZ	R3,		RIGHT_CYCLE
+	JMP		INTER_END
+RIGHT_CYCLE:
+	RR		A
+	DJNZ	R3,		RIGHT_CYCLE
 INTER_END:
+	SWAP	A
+	MOV		R7,		A
 	RETI
 	
 	END
