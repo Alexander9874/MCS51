@@ -4,13 +4,13 @@ IEN0	EQU		0A8H
 	MOV		DPTR,	#7FFFh
 	MOV		A,		#01h
 	MOVX	@DPTR	A		;ввод символа слева,
-	;декодированный режим
+							;декодированный режим
 	LJMP	M2
 ORG 8013h					;обработчик прерывания INT1
 	MOV		DPTR,	#7FFFh
 	MOV		A,		#40h
 	MOVX	@DPTR,	A		;разрешение чтения FIFO
-	;клавиатуры
+							;клавиатуры
 	MOV		DPTR,	#7FFEh
 	MOVX	A,		@DPTR	;чтение скан-кода
 	CJNE	A,		#D9h,	K1
