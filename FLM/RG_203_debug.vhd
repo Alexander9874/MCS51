@@ -394,22 +394,22 @@ begin
 	begin
 		D:= D3 & D2 & D1 & D0;
 		case D is
-			when "0000" => F<= 0;
-			when "0001" => F<= 1;
-			when "0010" => F<= 2;
-			when "0011" => F<= 3;
-			when "0100" => F<= 4;
-			when "0101" => F<= 5;
-			when "0110" => F<= 6;
-			when "0111" => F<= 8;
-			when "1000" => F<= 9;
-			when "1001" => F<= 10;
-			when "1010" => F<= 0;
-			when "1011" => F<= 1;
-			when "1100" => F<= 2;
-			when "1101" => F<= 3;
-			when "1110" => F<= 4;
-			when "1111" => F<= 5;
+			when "0000" => F <= 0;
+			when "0001" => F <= 1;
+			when "0010" => F <= 2;
+			when "0011" => F <= 3;
+			when "0100" => F <= 4;
+			when "0101" => F <= 5;
+			when "0110" => F <= 6;
+			when "0111" => F <= 8;
+			when "1000" => F <= 9;
+			when "1001" => F <= 10;
+			when "1010" => F <= 0;
+			when "1011" => F <= 1;
+			when "1100" => F <= 2;
+			when "1101" => F <= 3;
+			when "1110" => F <= 4;
+			when "1111" => F <= 5;
 		end case;
 	end process;
 end MA7421_arch;
@@ -482,10 +482,10 @@ begin
 	begin
 		D:= A0 & B0;
 		case D is
-			when "00" => S<= 0;
-			when "01" => S<= 1;
-			when "10" => S<= 1;
-			when "11" => S<= 2;
+			when "00" => S <= 0;
+			when "01" => S <= 1;
+			when "10" => S <= 1;
+			when "11" => S <= 2;
 		end case;
 	end process;
 end SM2_arch;
@@ -512,22 +512,22 @@ begin
 	begin
 		D:= D3 & D2 & D1 & D0;
 		case D is
-			when "0000" => F<= 3;
-			when "0001" => F<= 2;
-			when "0010" => F<= 1;
-			when "0011" => F<= 1;
-			when "0100" => F<= 1;
-			when "0101" => F<= 0;
-			when "0110" => F<= 0;
-			when "0111" => F<= 0;
-			when "1000" => F<= 2;
-			when "1001" => F<= 1;
-			when "1010" => F<= 0;
-			when "1011" => F<= 0;
-			when "1100" => F<= 1;
-			when "1101" => F<= 0;
-			when "1110" => F<= 0;
-			when "1111" => F<= 0;
+			when "0000" => F <= 3;
+			when "0001" => F <= 2;
+			when "0010" => F <= 1;
+			when "0011" => F <= 1;
+			when "0100" => F <= 1;
+			when "0101" => F <= 0;
+			when "0110" => F <= 0;
+			when "0111" => F <= 0;
+			when "1000" => F <= 2;
+			when "1001" => F <= 1;
+			when "1010" => F <= 0;
+			when "1011" => F <= 0;
+			when "1100" => F <= 1;
+			when "1101" => F <= 0;
+			when "1110" => F <= 0;
+			when "1111" => F <= 0;
 		end case;
 	end process;
 end CD0_arch;
@@ -553,14 +553,14 @@ begin
 	begin
 		D:= D2 & D1 & D0;
 		case D is
-			when "000" => F<= 9;
-			when "001" => F<= 6;
-			when "010" => F<= 6;
-			when "011" => F<= 3;
-			when "100" => F<= 6;
-			when "101" => F<= 3;
-			when "110" => F<= 3;
-			when "111" => F<= 0;
+			when "000" => F <= 9;
+			when "001" => F <= 6;
+			when "010" => F <= 6;
+			when "011" => F <= 3;
+			when "100" => F <= 6;
+			when "101" => F <= 3;
+			when "110" => F <= 3;
+			when "111" => F <= 0;
 		end case;
 	end process;
 end C0M3_arch;
@@ -587,22 +587,22 @@ begin
 	begin
 		D:= D3 & D2 & D1 & D0;
 		case D is
-			when "0000" => F<= 0;
-			when "0001" => F<= 1;
-			when "0010" => F<= 0;
-			when "0011" => F<= 2;
-			when "0100" => F<= 0;
-			when "0101" => F<= 1;
-			when "0110" => F<= 0;
-			when "0111" => F<= 3;
-			when "1000" => F<= 0;
-			when "1001" => F<= 1;
-			when "1010" => F<= 0;
-			when "1011" => F<= 2;
-			when "1100" => F<= 0;
-			when "1101" => F<= 1;
-			when "1110" => F<= 0;
-			when "1111" => F<= 4;
+			when "0000" => F <= 0;
+			when "0001" => F <= 1;
+			when "0010" => F <= 1;
+			when "0011" => F <= 2;
+			when "0100" => F <= 1;
+			when "0101" => F <= 1;
+			when "0110" => F <= 2;
+			when "0111" => F <= 3;
+			when "1000" => F <= 1;
+			when "1001" => F <= 1;
+			when "1010" => F <= 1;
+			when "1011" => F <= 2;
+			when "1100" => F <= 2;
+			when "1101" => F <= 1;
+			when "1110" => F <= 3;
+			when "1111" => F <= 4;
 		end case;
 	end process;
 end CG1_arch;
