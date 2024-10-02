@@ -3,9 +3,11 @@
 !.a51
 !.pdf
 !.gitignore
+!.dpm
 !*/
 !**/*.a51
 !**/*.pdf
+!**/*.dmp
 
 !.vhd
 !**/*.vhd
