@@ -1,10 +1,14 @@
-ORG	0000h	;ORG	8000h
+ORG	0000h
+;ORG	8000h
 	LJMP		START
-ORG	0013h	;ORG	8013h
+ORG	0013h
+;ORG	8013h
 	LJMP		INTERAPTION
 P4	EQU		0C0h
 	
 START:
+	MOV		SP,		#30h		;very important!
+
 	LCALL	INIT_LCD
 	LCALL	RESET_SSI
 
@@ -16,13 +20,12 @@ START:
 	MOV		A,		#01h		;FIFO wright enable
 	MOVX	@DPTR,	A			;decoding mode
 	
-	MOV		DPTR,	#7FFFh		;VRAM wright enable				;
-	MOV		A,		#081h		;no autoincrement				;PROBABLY SHOUKD DELETE IT
-	MOVX	@DPTR,	A			;set adress 2 (or 1 IDK)		;
+;	MOV		DPTR,	#7FFFh		;VRAM wright enable				;
+;	MOV		A,		#081h		;no autoincrement				;PROBABLY SHOULD DELETE IT
+;	MOVX	@DPTR,	A			;set adress 2 (or 1 IDK)		;
 CYCLE_INF:
 	MOV		P4,		R7
 	SJMP	CYCLE_INF
-
 
 ;*******************************************************************************
 ;interaption function
@@ -87,12 +90,11 @@ PREPARE_RESAULT:
 	LCALL	LCD_OUTPUT
 	LCALL	SSI_OUTPUT
 RET_INT:
-	MOV		DPTR,	#7FFFh		;FIFO wright enable
-	MOV		A,		#01h		;decoding mode
-	MOVX	@DPTR,	A			;
+;	MOV		DPTR,	#7FFFh		;FIFO wright enable
+;	MOV		A,		#01h		;decoding mode
+;	MOVX	@DPTR,	A			;
 
 	RETI
-
 
 ;*******************************************************************************
 ;function to extract operands from memory
