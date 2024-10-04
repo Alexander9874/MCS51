@@ -38,7 +38,7 @@ architecture MFR_arch of MFR is
 	signal s4: integer range 0 to 3;
 	signal s5: integer range 0 to 9;
 	signal s6: integer range 0 to 4;
-	signal s7: integer range 0 to 13;
+	signal s7: integer range 0 to 14;
 
 -- mod 10 & to 7421
 COMPONENT MA7421
@@ -57,7 +57,7 @@ COMPONENT SM4
 	PORT (
 		A: in integer range 0 to 9;
 		B: in integer range 0 to 4;
-		S: out integer range 0 to 13
+		S: out integer range 0 to 14
 	);
 end COMPONENT;
 
@@ -147,7 +147,7 @@ COMPONENT RG
 		II: in integer range 0 to 15;
 		SM2: in integer range 0 to 2;
 		ND0: in integer range 0 to 3;
-		SM4: in integer range 0 to 13;
+		SM4: in integer range 0 to 14;
 
 		Q0: buffer BIT;
 		Q1: buffer BIT;
@@ -501,7 +501,7 @@ entity SM4 is
 	PORT (
 		A: in integer range 0 to 9;
 		B: in integer range 0 to 4;
-		S: out integer range 0 to 13
+		S: out integer range 0 to 14
 	);
 end SM4;
 
@@ -540,7 +540,7 @@ entity RG is
 		II: in integer range 0 to 15;
 		SM2: in integer range 0 to 2;
 		ND0: in integer range 0 to 3;
-		SM4: in integer range 0 to 13;
+		SM4: in integer range 0 to 14;
 
 		Q0: buffer BIT;
 		Q1: buffer BIT;
