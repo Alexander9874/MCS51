@@ -585,7 +585,7 @@ begin
 				end case ;
 
 			elsif Y0 = '0' and Y1 = '1' and Y2 = '0' then
-				Q0 <= Q3;
+				Q0 <= '0';
 				Q1 <= Q0;
 				Q2 <= Q1;
 				Q3 <= Q3;
