@@ -3,7 +3,7 @@ ORG	0000h
 	LJMP		START
 ORG	0013h
 ;ORG	8013h
-	LJMP		INTERAPTION
+	LJMP		INTERRUPTION
 P4	EQU		0C0h
 	
 START:
@@ -20,21 +20,18 @@ START:
 	MOV		A,		#01h		;FIFO wright enable
 	MOVX	@DPTR,	A			;decoding mode
 	
-;	MOV		DPTR,	#7FFFh		;VRAM wright enable				;
-;	MOV		A,		#081h		;no autoincrement				;PROBABLY SHOULD DELETE IT
-;	MOVX	@DPTR,	A			;set adress 2 (or 1 IDK)		;
 CYCLE_INF:
 	MOV		P4,		R7
 	SJMP	CYCLE_INF
 
 ;*******************************************************************************
-;interaption function
+;interruption function
 ;flag 	F0 = 1 means waiting for 2nd letter (1st letter was 9 or 7)
 ;		F0 = 0 means waiting for 1st letter
 ;flag	PSW.1 = 1 means 1st letter was 7 (waiting for B) operation 2
 ;		PSW.1 = 0 means 1st letter was 9 (waiting for 3) operation 1
 ;*******************************************************************************
-INTERAPTION:
+INTERRUPTION:
 	MOV		DPTR,	#7FFFh		;
 	MOV		A,		#40h		;
 	MOVX	@DPTR,	A			;KB FIFO read enable
@@ -71,10 +68,10 @@ KB_SCS:
 	JB		PSW.1,	OPER_2
 OPER_1:
 	LCALL	OPERATION_1
-	JMP		PREPARE_RESAULT
+	JMP		PREPARE_RESULT
 OPER_2:
 	LCALL	OPERATION_2
-PREPARE_RESAULT:
+PREPARE_RESULT:
 	MOV		R6,		A
 	SWAP	A
 	MOV		R7,		A			;R7 - buffer for P4
@@ -103,7 +100,7 @@ RET_INT:
 ;			R1 is value of B[R3]
 ;			R2 is index of A in array A
 ;			R3 is index of B in array B
-;does not requires any input			
+;does not require any input			
 ;*******************************************************************************
 EXTRACT:
 	MOV		DPTR,	#7FFAh		;get input from tumblers
@@ -266,7 +263,7 @@ INIT_CYCLE:
 	MOV		B,		A
 	LCALL	LCD_DATA
 	MOV		DPH,	#80h		;
-	INC		R0					;next letter prt
+	INC		R0					;next letter ptr
 	MOV		DPL,	R0			;
 	JMP		INIT_CYCLE
 INIT_END:
@@ -303,33 +300,33 @@ RESET_SSI:
 	MOV		A,		#01h		;
 	MOVX	@DPTR,	A			;
 
-	MOV		DPTR,	#7FFFh		;set adress = 1 for ssi
+	MOV		DPTR,	#7FFFh		;set address = 1 for ssi
 	MOV		A,		#80h		;
-	MOVX	@DPTR,	A			;adresses:	1|2|3|4
+	MOVX	@DPTR,	A			;addresses:	1|2|3|4
 
 	MOV		DPTR,	#7FFEh		;erase selected indicator
 	MOV		A,		#00h		;
 	MOVX	@DPTR,	A			;
 
-	MOV		DPTR,	#7FFFh		;set adress = 2 for ssi
+	MOV		DPTR,	#7FFFh		;set address = 2 for ssi
 	MOV		A,		#81h		;
-	MOVX	@DPTR,	A			;adresses:	1|2|3|4
+	MOVX	@DPTR,	A			;addresses:	1|2|3|4
 
 	MOV		DPTR,	#7FFEh		;erase selected indicator
 	MOV		A,		#00h		;
 	MOVX	@DPTR,	A			;
 
-	MOV		DPTR,	#7FFFh		;set adress = 3 for ssi
+	MOV		DPTR,	#7FFFh		;set address = 3 for ssi
 	MOV		A,		#82h		;
-	MOVX	@DPTR,	A			;adresses:	1|2|3|4
+	MOVX	@DPTR,	A			;addresses:	1|2|3|4
 
 	MOV		DPTR,	#7FFEh		;erase selected indicator
 	MOV		A,		#00h		;
 	MOVX	@DPTR,	A			;
 
-	MOV		DPTR,	#7FFFh		;set adress = 4 for ssi
+	MOV		DPTR,	#7FFFh		;set address = 4 for ssi
 	MOV		A,		#83h		;
-	MOVX	@DPTR,	A			;adresses:	1|2|3|4
+	MOVX	@DPTR,	A			;addresses:	1|2|3|4
 
 	MOV		DPTR,	#7FFEh		;erase selected indicator
 	MOV		A,		#00h		;
@@ -346,9 +343,9 @@ SSI_OUTPUT:
 	MOV		A,		#01h		;
 	MOVX	@DPTR,	A			;
 
-	MOV		DPTR,	#7FFFh		;set adress = 2 for ssi
+	MOV		DPTR,	#7FFFh		;set address = 2 for ssi
 	MOV		A,		#81h		;
-	MOVX	@DPTR,	A			;adresses:	1|2|3|4	
+	MOVX	@DPTR,	A			;addresses:	1|2|3|4	
 
 	MOV		DPTR,	#7FFEh		;prepare ptr where to wright symbol
 SSI_0:
