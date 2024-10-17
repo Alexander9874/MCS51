@@ -1,6 +1,5 @@
 	ORG		0h
 
-
 ;*******************************************************************************
 ;Redefine registers from context 1 (current context is 0)
 ;as Ni and Ni_MAX
@@ -14,7 +13,6 @@
 	N2_MAX	EQU		0Dh
 	N3_MAX	EQU		0Eh
 	N4_MAX	EQU		0Fh
-
 
 ;*******************************************************************************
 ;F0 - blocking flag
@@ -72,16 +70,11 @@ MAIN_FINISH:
 	MOV		P2,		#04h
 	MOV		P3,		#00h
 MAIN_FINISH_LOOP:
-	MOV		A,		P0			;comment this
-	JB		ACC.7,	START		;to correspond task
 	SJMP	MAIN_FINISH_LOOP
 MAIN_BLOCK:
 	MOV		P1,		#0AAh
 MAIN_BLOCK_LOOP:
-	MOV		A,		P0			;comment this
-	JB		ACC.7,	START		;to correspond task
 	SJMP	MAIN_BLOCK_LOOP
-
 
 ;*******************************************************************************
 ;Function for indication
@@ -100,7 +93,6 @@ INDICATION:
 	MOV		P3,		A
 	RET
 
-
 ;*******************************************************************************
 ;Function to precess inputed data
 ;depends on current state of automata
@@ -108,7 +100,7 @@ INDICATION:
 ;has no output
 ;*******************************************************************************
 PROCESSING:
-	MOV		A,		@R1
+	NOP
 N1_CHECK:
 	CJNE	R7,		#01h,		N2_CHECK
 	LCALL	N1_FUNCTION
@@ -127,7 +119,6 @@ PROCESSING_RETURN:
 	LCALL	INDICATION
 	RET
 
-
 ;*******************************************************************************
 ;Function for state 1
 ;calculates N2_max as max(mod_3(N1+1),2) that is always 2
@@ -135,7 +126,7 @@ PROCESSING_RETURN:
 ;has no output
 ;*******************************************************************************
 N1_FUNCTION:
-	XRL		A,		#02h
+	XRL		A,		#04h
 	JZ		N1_SUCCESS
 N1_MISTAKE:
 	INC		N1
@@ -152,7 +143,6 @@ N1_ERROR:
 	SETB	F0
 	JMP		N1_RETURN
 
-
 ;*******************************************************************************
 ;Function for state 2
 ;calculates N3_max as min(2*N1,2*N2,1) can be
@@ -162,7 +152,7 @@ N1_ERROR:
 ;has no output
 ;*******************************************************************************
 N2_FUNCTION:
-	XRL		A,		#02h
+	XRL		A,		#04h
 	JZ		N2_SUCCESS
 N2_MISTAKE:
 	INC		N2
@@ -185,7 +175,6 @@ N2_ERROR:
 	SETB	F0
 	JMP		N2_RETURN
 
-
 ;*******************************************************************************
 ;Function for state 3
 ;calculates N3_max as abs(max(N2,N3)-2*N1),
@@ -196,7 +185,7 @@ N2_ERROR:
 ;has no output
 ;*******************************************************************************
 N3_FUNCTION:
-	XRL		A,		#07h
+	XRL		A,		#80h
 	JZ		N3_SUCCESS
 N3_MISTAKE:
 	INC		N3
@@ -221,14 +210,13 @@ N3_ERROR:
 	SETB	F0
 	JMP		N3_RETURN
 
-
 ;*******************************************************************************
 ;Function for state 4
 ;input: A is value from P0
 ;has no output
 ;*******************************************************************************
 N4_FUNCTION:
-	XRL		A,		#05h
+	XRL		A,		#20h
 	JZ		N4_SUCCESS
 N4_MISTAKE:
 	INC		N4
