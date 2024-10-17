@@ -1,5 +1,10 @@
 	ORG		0h
 
+
+;*******************************************************************************
+;Redefine registers from context 1 (current context is 0)
+;as Ni and Ni_MAX
+;*******************************************************************************
 	N1		EQU		08h
 	N2		EQU		09h
 	N3		EQU		0Ah
@@ -10,6 +15,19 @@
 	N3_MAX	EQU		0Eh
 	N4_MAX	EQU		0Fh
 
+
+;*******************************************************************************
+;F0 - blocking flag
+;P0 - input
+;P1 - output of current state of automata
+;P2 low nible - output of amount of mistakes at state 1
+;P2 high nible - output of amount of mistakes at state 2
+;P3 low nible - output of amount of mistakes at state 3
+;P3 high nible - output of amount of mistakes at state 4
+;R0 - blinking pointer (24, 25)
+;R7 - current state of automata
+;To exit final state set bit ACC.7
+;*******************************************************************************
 START:
 	MOV		N1,		#00h
 	MOV		N2,		#00h
@@ -54,17 +72,22 @@ MAIN_FINISH:
 	MOV		P2,		#04h
 	MOV		P3,		#00h
 MAIN_FINISH_LOOP:
-	MOV		A,		P0
-	JB		ACC.7,	START
+	MOV		A,		P0			;comment this
+	JB		ACC.7,	START		;to correspond task
 	SJMP	MAIN_FINISH_LOOP
 MAIN_BLOCK:
 	MOV		P1,		#0AAh
 MAIN_BLOCK_LOOP:
-	MOV		A,		P0
-	JB		ACC.7,	START
+	MOV		A,		P0			;comment this
+	JB		ACC.7,	START		;to correspond task
 	SJMP	MAIN_BLOCK_LOOP
 
 
+;*******************************************************************************
+;Function for indication
+;does not require input
+;does not create output
+;*******************************************************************************
 INDICATION:
 	MOV		P1,		R7
 	MOV		A,		N2
@@ -78,6 +101,12 @@ INDICATION:
 	RET
 
 
+;*******************************************************************************
+;Function to precess inputed data
+;depends on current state of automata
+;does not require input
+;does not create output
+;*******************************************************************************
 PROCESSING:
 	MOV		A,		@R1
 N1_CHECK:
@@ -99,6 +128,12 @@ PROCESSING_RETURN:
 	RET
 
 
+;*******************************************************************************
+;Function for state 1
+;calculates N2_max as max(mod_3(N1+1),2) that is always 2
+;input: A is value from P0
+;does not create output
+;*******************************************************************************
 N1_FUNCTION:
 	XRL		A,		#02h
 	JZ		N1_SUCCESS
@@ -110,7 +145,7 @@ N1_MISTAKE:
 	JMP		N1_RETURN
 N1_SUCCESS:
 	MOV		R7,		#02h
-	LCALL	N1_CALCULATE
+	MOV		N2_MAX,		#02h
 N1_RETURN:
 	RET
 N1_ERROR:
@@ -118,11 +153,14 @@ N1_ERROR:
 	JMP		N1_RETURN
 
 
-N1_CALCULATE:
-	MOV		N2_MAX,		#02h
-	RET
-
-
+;*******************************************************************************
+;Function for state 2
+;calculates N3_max as min(2*N1,2*N2,1) can be
+;	0 if N1 or N2 is 0
+;	1 if N1 and N2 are not 0
+;input: A is value from P0
+;does not create output
+;*******************************************************************************
 N2_FUNCTION:
 	XRL		A,		#02h
 	JZ		N2_SUCCESS
@@ -134,7 +172,13 @@ N2_MISTAKE:
 	JMP		N2_RETURN
 N2_SUCCESS:
 	MOV		R7,		#03h
-	LCALL	N2_CALCULATE
+	MOV		A,		N1
+	JZ		N2_MARK
+	MOV		A,		N2
+	JZ		N2_MARK
+	MOV		A,		#01h
+N2_MARK:
+	MOV		N3_MAX,	A
 N2_RETURN:
 	RET
 N2_ERROR:
@@ -142,17 +186,15 @@ N2_ERROR:
 	JMP		N2_RETURN
 
 
-N2_CALCULATE:
-	MOV		A,		N1
-	JZ		N2_CALCULATE_RETURN
-	MOV		A,		N2
-	JZ		N2_CALCULATE_RETURN
-	MOV		A,		#01h
-N2_CALCULATE_RETURN:
-	MOV		N3_MAX,	A
-	RET
-
-
+;*******************************************************************************
+;Function for state 3
+;calculates N3_max as abs(max(N2,N3)-2*N1),
+;	N2 is always 2, N3 can be 0 or 1, so max(N2,N3) is 2
+;	for N1 > 0 : result is 2(N1-1)
+;	for N1 = 0 : result is 2
+;input: A is value from P0
+;does not create output
+;*******************************************************************************
 N3_FUNCTION:
 	XRL		A,		#07h
 	JZ		N3_SUCCESS
@@ -164,7 +206,15 @@ N3_MISTAKE:
 	JMP		N3_RETURN
 N3_SUCCESS:
 	MOV		R7,		#04h
-	LCALL	N3_CALCULATE
+	MOV		A,		N1
+	JZ		N3_MARK_0
+	DEC		A
+	RL		A
+	JMP		N3_MARK_1
+N3_MARK_0:
+	MOV		A,		#02h
+N3_MARK_1:
+	MOV		N4_MAX,	A
 N3_RETURN:
 	RET
 N3_ERROR:
@@ -172,19 +222,11 @@ N3_ERROR:
 	JMP		N3_RETURN
 
 
-N3_CALCULATE:
-	MOV		A,		N1
-	JZ		N3_MARK
-	DEC		A
-	RL		A
-N3_CALCULATE_RETURN:
-	MOV		N4_MAX,	A
-	RET
-N3_MARK:
-	MOV		A,		#02h
-	JMP		N3_CALCULATE_RETURN
-	
-
+;*******************************************************************************
+;Function for state 4
+;input: A is value from P0
+;does not create output
+;*******************************************************************************
 N4_FUNCTION:
 	XRL		A,		#05h
 	JZ		N4_SUCCESS
@@ -201,6 +243,5 @@ N4_RETURN:
 N4_ERROR:
 	SETB	F0
 	JMP		N4_RETURN
-
 
 	END
