@@ -20,13 +20,13 @@
 ;F0 - blocking flag
 ;P0 - input
 ;P1 - output of current state of automata
-;P2 low nible - output of amount of mistakes at state 1
-;P2 high nible - output of amount of mistakes at state 2
-;P3 low nible - output of amount of mistakes at state 3
-;P3 high nible - output of amount of mistakes at state 4
+;P2 low nibble - output of amount of mistakes at state 1
+;P2 high nibble - output of amount of mistakes at state 2
+;P3 low nibble - output of amount of mistakes at state 3
+;P3 high nibble - output of amount of mistakes at state 4
 ;R0 - blinking pointer (24, 25)
 ;R7 - current state of automata
-;To exit final state set bit ACC.7
+;To exit final (blocking or finish) state set bit ACC.7
 ;*******************************************************************************
 START:
 	MOV		N1,		#00h
@@ -86,7 +86,7 @@ MAIN_BLOCK_LOOP:
 ;*******************************************************************************
 ;Function for indication
 ;does not require input
-;does not create output
+;has no output
 ;*******************************************************************************
 INDICATION:
 	MOV		P1,		R7
@@ -105,7 +105,7 @@ INDICATION:
 ;Function to precess inputed data
 ;depends on current state of automata
 ;does not require input
-;does not create output
+;has no output
 ;*******************************************************************************
 PROCESSING:
 	MOV		A,		@R1
@@ -132,7 +132,7 @@ PROCESSING_RETURN:
 ;Function for state 1
 ;calculates N2_max as max(mod_3(N1+1),2) that is always 2
 ;input: A is value from P0
-;does not create output
+;has no output
 ;*******************************************************************************
 N1_FUNCTION:
 	XRL		A,		#02h
@@ -159,7 +159,7 @@ N1_ERROR:
 ;	0 if N1 or N2 is 0
 ;	1 if N1 and N2 are not 0
 ;input: A is value from P0
-;does not create output
+;has no output
 ;*******************************************************************************
 N2_FUNCTION:
 	XRL		A,		#02h
@@ -193,7 +193,7 @@ N2_ERROR:
 ;	for N1 > 0 : result is 2(N1-1)
 ;	for N1 = 0 : result is 2
 ;input: A is value from P0
-;does not create output
+;has no output
 ;*******************************************************************************
 N3_FUNCTION:
 	XRL		A,		#07h
@@ -225,7 +225,7 @@ N3_ERROR:
 ;*******************************************************************************
 ;Function for state 4
 ;input: A is value from P0
-;does not create output
+;has no output
 ;*******************************************************************************
 N4_FUNCTION:
 	XRL		A,		#05h
