@@ -9,4 +9,6 @@ Code for MCS51 assembly and Spartan1 VHDL.
 
 [MCS51: Lab Report 5](https://docs.google.com/document/d/1oLupF_Kx31AdoUCahc3lidgM3t33QcQXcdTRAYkJEbQ/edit?usp=sharing)
 
-[FLM: Lab report](https://docs.google.com/document/d/1xYW_FuDC7ZKHSiBQFEq3C9Yv0qFMCB0SToLXFWJfOG8/edit?usp=sharing)
+[FLM: Lab Report](https://docs.google.com/document/d/1xYW_FuDC7ZKHSiBQFEq3C9Yv0qFMCB0SToLXFWJfOG8/edit?usp=sharing)
+
+[FLM: Home Task](https://docs.google.com/document/d/1OajPN23DgPSHY0RYlZKCuM-eaB3-1zVg-PAsK46viNg/edit?usp=sharing)
